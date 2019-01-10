@@ -1,0 +1,1 @@
+./word2vec -train /mnt/hdd/s.shreyas/deepwalk-master/example_graphs/cremoGraphAllEdgesUndirected.embeddings.walks.0 -output cremo.bin -cbow 1 -size 50 -window 8 -negative 25 -hs 0 -sample 0 -threads 1 -binary 1 -iter 15 -min-count 0 -debug 10
