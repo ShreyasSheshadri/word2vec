@@ -37,7 +37,7 @@ struct vocab_word {
 char train_file[MAX_STRING], output_file[MAX_STRING];
 char save_vocab_file[MAX_STRING], read_vocab_file[MAX_STRING];
 struct vocab_word *vocab;
-int binary = 0, cbow = 1, debug_mode = 2, window = 5, min_count = 5, num_threads = 12, min_reduce = 1;
+int binary = 0, cbow = 1, debug_mode = 2, window = 5, min_count = 5, num_threads = 12, min_reduce = 0;
 int *vocab_hash;
 long long vocab_max_size = 1000, vocab_size = 0, layer1_size = 100;
 long long train_words = 0, word_count_actual = 0, iter = 5, file_size = 0, classes = 0;
@@ -190,6 +190,8 @@ void ReduceVocab() {
     vocab[b].word = vocab[a].word;
     b++;
   } else free(vocab[a].word);
+  printf("Vocab size: %lld\n", vocab_size);
+  printf("New Vocab size: %lld\n", b);
   vocab_size = b;
   for (a = 0; a < vocab_hash_size; a++) vocab_hash[a] = -1;
   for (a = 0; a < vocab_size; a++) {
@@ -296,7 +298,10 @@ void LearnVocabFromTrainFile() {
       a = AddWordToVocab(word);
       vocab[a].cn = 1;
     } else vocab[i].cn++;
-    if (vocab_size > vocab_hash_size * 0.7) ReduceVocab();
+    if (vocab_size > vocab_hash_size * 0.7) {
+        printf("Reducing Vocab-size", vocab_size);
+        ReduceVocab();
+    }
   }
   SortVocab();
   if (debug_mode > 0) {
