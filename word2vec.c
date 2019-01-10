@@ -191,7 +191,7 @@ void ReduceVocab() {
     b++;
   } else free(vocab[a].word);
   printf("Vocab size: %lld\n", vocab_size);
-  printf("New Vocab size: %lld\n", b);
+  printf("New Vocab size: %d\n", b);
   vocab_size = b;
   for (a = 0; a < vocab_hash_size; a++) vocab_hash[a] = -1;
   for (a = 0; a < vocab_size; a++) {
@@ -274,7 +274,7 @@ void CreateBinaryTree() {
 void LearnVocabFromTrainFile() {
   char word[MAX_STRING], eof = 0;
   FILE *fin;
-  long long a, i, wc = 0;
+  long long a, i, wc = 0, out_of_vocab_count = 0;
   for (a = 0; a < vocab_hash_size; a++) vocab_hash[a] = -1;
   fin = fopen(train_file, "rb");
   if (fin == NULL) {
@@ -295,14 +295,16 @@ void LearnVocabFromTrainFile() {
     }
     i = SearchVocab(word);
     if (i == -1) {
+      out_of_vocab_count++;
       a = AddWordToVocab(word);
       vocab[a].cn = 1;
     } else vocab[i].cn++;
     if (vocab_size > vocab_hash_size * 0.7) {
-        printf("Reducing Vocab-size", vocab_size);
+        printf("Reducing Vocab-size: %lld\n", vocab_size);
         ReduceVocab();
     }
   }
+  printf("Out of Vocab size: %lld\n", out_of_vocab_count);
   SortVocab();
   if (debug_mode > 0) {
     printf("Vocab size: %lld\n", vocab_size);
