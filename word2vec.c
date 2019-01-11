@@ -288,8 +288,8 @@ void LearnVocabFromTrainFile() {
     train_words++;
     wc++;
     if ((debug_mode > 1) && (wc >= 1000000)) {
-      printf("%lldM%c", train_words / 1000000, 13);
-      fflush(stdout);
+      printf("\t Reading... %lld \n", train_words);
+      //fflush(stdout);
       wc = 0;
     }
     i = SearchVocab(word);
